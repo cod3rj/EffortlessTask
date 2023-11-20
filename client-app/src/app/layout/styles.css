@@ -1,0 +1,22 @@
+/*Home Page Styles*/
+.homePageStyle {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #1fd2ff 0%, #000000 100%) !important;
+    height: 100vh;
+}
+
+.homePageStyle .ui.menu .ui.button,
+.ui.menu a.ui.inverted.button {
+    margin-left: 0.5em;
+}
+
+.homePageStyle h1.ui.header {
+    font-size: 4em;
+    font-weight: normal;
+}
+
+.homePageStyle h2{
+    font-size: 1.7em;
+    font-weight: normal;
+}

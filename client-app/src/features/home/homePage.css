@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+
+    overflow: hidden; /* Prevents horizontal and vertical scrolling */
+}
+
+.blob {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #3498db; /* Blob color */
+    clip-path: circle(30% at 50% 50%);
+    z-index: 1; /* Place the blob behind the content */
+    animation: blobMove 5s infinite alternate; /* Animation for blob movement */
+}
+
+@keyframes blobMove {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(20px, 20px);
+    }
+}

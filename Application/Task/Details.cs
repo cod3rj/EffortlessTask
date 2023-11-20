@@ -7,34 +7,30 @@ using Persistence;
 
 namespace Application.Task
 {
-    public class List
+    public class Details
     {
-        public class Query : IRequest<Result<List<TaskDto>>>
+        public class Query : IRequest<Result<TaskDto>>
         {
+            public int Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<TaskDto>>>
+        public class Handler : IRequestHandler<Query, Result<TaskDto>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-
             public Handler(DataContext context, IMapper mapper)
             {
                 _mapper = mapper;
                 _context = context;
             }
 
-            public async Task<Result<List<TaskDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<TaskDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var Tasks = await _context.ToDoLists
+                var task = await _context.ToDoLists
                     .ProjectTo<TaskDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
+                    .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                if (Tasks == null) return null;
-
-                if (Tasks.Count == 0) return Result<List<TaskDto>>.Failure("No Tasks found");
-
-                return Result<List<TaskDto>>.Success(Tasks);
+                return Result<TaskDto>.Success(task);
             }
         }
     }

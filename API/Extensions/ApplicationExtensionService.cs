@@ -34,6 +34,8 @@ namespace API.Extensions
 
             services.AddFluentValidationAutoValidation();
 
+            services.AddHttpContextAccessor();
+
             return services;
         }
     }
