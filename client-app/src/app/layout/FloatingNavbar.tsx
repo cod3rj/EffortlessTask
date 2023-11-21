@@ -20,7 +20,7 @@ const FloatingNavbar = () => {
                 Effortless Tasks
             </Menu.Item>
 
-            <Menu.Item as={Link} to="/tasks">
+            <Menu.Item as={Link} to="/task">
                 Tasks
             </Menu.Item>
 

@@ -1,24 +1,11 @@
-using System.Security.Claims;
-using Application.Core;
 using Application.Task;
 using Domain;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Persistence;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     public class TaskController : BaseApiController
     {
-
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public TaskController(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
 
         [HttpGet]
         public async Task<IActionResult> GetTasks()
@@ -31,6 +18,13 @@ namespace API.Controllers
         public async Task<IActionResult> GetTaskById(int id)
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditTask(int id, ToDoList task)
+        {
+            task.Id = id;
+            return HandleResult(await Mediator.Send(new Edit.Command { Task = task }));
         }
     }
 }

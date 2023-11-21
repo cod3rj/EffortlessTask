@@ -20,8 +20,10 @@ export default class UserStore {
         try {
             const user = await agent.Account.login(creds); // This will call the login method in the agent.ts file and pass the creds
             store.commonStore.setToken(user.token); // This will set the token in the local storage
-            runInAction(() => this.user = user); // This will set the user in the state
-            runInAction(() => this.loading = false); // This will set the loading state to false
+            runInAction(() => {
+                this.user = user; // This will set the user in the state
+                this.loading = false; // This will set the loading state to false
+            }); // This will set the user in the state
             router.navigate('/task'); // This will redirect the user to the activities page
 
         } catch (error) {
@@ -51,4 +53,5 @@ export default class UserStore {
             console.log(error);
         }
     }
+
 }

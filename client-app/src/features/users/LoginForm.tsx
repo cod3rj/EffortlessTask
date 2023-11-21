@@ -14,10 +14,11 @@ function LoginForm() {
     if (loading) {
         return <LoadingComponent />;
     }
+
     const validationSchema = Yup.object({
-        email: Yup.string().required().email(),
-        password: Yup.string().required(),
-    });
+        email: Yup.string().required('Email is required').email(),
+        password: Yup.string().required('Password is required'),
+    })
 
     const handleSubmit = async (
         values: { email: string; password: string },
@@ -31,18 +32,18 @@ function LoginForm() {
             actions.setErrors({ error: 'Invalid email or password' });
             actions.setSubmitting(false);
         }
-    };
+    }
 
     return (
         <Formik initialValues={{ email: '', password: '', error: null }} onSubmit={handleSubmit} validationSchema={validationSchema}>
             {(props) => (
-                <Grid style={{ height: '100vh' }} centered verticalAlign='middle'>
+                <Grid style={{ height: '75vh' }} centered verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450, textAlign: 'left' }}>
                         <Header as='h2' color='teal' textAlign='center'>
                             <Image src='assets/logo.png' /> Sign in to your account
                         </Header>
-                        <Form className='ui form' onSubmit={props.handleSubmit} autoComplete='off'>
-                            <Segment stacked>
+                        <Form className='ui large form ui form' onSubmit={props.handleSubmit}>
+                            <Segment stacked raised>
                                 <MyTextInput placeholder='E-mail Address'
                                              name='email'
                                              icon='user'

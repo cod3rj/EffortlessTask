@@ -9,9 +9,13 @@ namespace Application.Core
         public MappingProfiles()
         {
             // CreateMap<Source, Destination>();
-            // We are mapping from the source ToDoList to the destination TaskDto e.g ToDoList.Title to TaskDto.Title
-            CreateMap<ToDoList, TaskDto>()
-                .ForMember(d => d.AppUserId, o => o.MapFrom(s => s.AppUserId));
+            // We are mapping from the source ToDoList to the destination TaskDto, e.g., ToDoList.Title to TaskDto.Title
+            CreateMap<ToDoList, ToDoList>();
+
+            // Add the reverse mapping if needed
+            CreateMap<TaskDto, ToDoList>()
+                .ForMember(d => d.AppUserId, o => o.MapFrom(s => s.AppUserId))
+                .ReverseMap();
         }
     }
 }

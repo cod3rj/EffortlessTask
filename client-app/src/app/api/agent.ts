@@ -1,5 +1,5 @@
-import axios, {AxiosError, AxiosResponse} from 'axios';
-import { Task } from '../models/task';
+import axios, {AxiosError, AxiosResponse} from "axios";
+import {Task, TaskFormValues} from '../models/task';
 import {User, UserFormValues} from "../models/user.ts";
 import {store} from "../stores/store.ts";
 import {router} from "../router/Routes.tsx";
@@ -15,19 +15,27 @@ axios.defaults.baseURL = 'http://localhost:5000/api';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
-axios.interceptors.response.use(config => {
-    const token = store.commonStore.token;
-    if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
-    return config;
-})
+axios.interceptors.request.use(
+    (config) => {
+        const token = store.commonStore.token;
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        // Handle request error (if needed)
+        return Promise.reject(error);
+    }
+)
 
-axios
 const request = {
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
     post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
     put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
     delete: <T>(url: string) => axios.delete<T>(url).then(responseBody)
 }
+
 axios.interceptors.response.use(async response => {
     // Simulate a delay of 1 second to provide a more realistic user experience.
     await sleep(1000);
@@ -88,6 +96,7 @@ axios.interceptors.response.use(async response => {
 })
 const Task = {
     list: () => request.get<Task[]>('/Task'),
+    update: (task: TaskFormValues) => request.put(`/Task/${task.id}`, task),
 }
 
 const Account = {

@@ -17,9 +17,10 @@ export default function MyTextInput(props: Props) {
             <Form.Input {...field} {...props} fluid
                    icon={props.icon ? props.icon : null}
                    iconPosition='left'
+                   size='large'
                    />
             {meta.touched && meta.error ? (
-                <Label basic color='red'>{meta.error}</Label>
+                <Label style={{marginBottom: 5, marginTop: 0}} basic color='red' pointing='above'>{meta.error}</Label>
                 ) : null }
         </Form.Field>
     )
