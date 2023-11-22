@@ -34,7 +34,7 @@ namespace Application.Task
                 // Save the changes if the result is greater than 0
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to update the activity"); // If the result is false we return a failure
+                if (!result) return Result<Unit>.Failure("Failed to update the task"); // If the result is false we return a failure
 
                 return Result<Unit>.Success(Unit.Value); // If the result is true we return a success with the unit value
             }

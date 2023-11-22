@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 export const NotFound = () => {
     return (
-        <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+        <div style={{ height: '75vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
             <Image src='assets/notfound.jpg' size='big' centered />
             <Header textAlign='center' size='large'>
                 Page Not Found

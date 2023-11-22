@@ -15,7 +15,6 @@ export default class TaskStore {
     // Filter tasks based on their status
     get tasksByStatus() {
         const tasks = Array.from(this.taskRegistry.values());
-
         return {
             todo: tasks.filter(task => !task.isDoing && !task.isDone),
             doing: tasks.filter(task => task.isDoing && !task.isDone),

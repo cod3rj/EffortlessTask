@@ -12,7 +12,7 @@ export default class UserStore {
     }
 
     get isLoggedIn () {
-        return !!this.user;
+        return store.commonStore.isLoggedIn;
     }
 
     login = async (creds: UserFormValues) => {

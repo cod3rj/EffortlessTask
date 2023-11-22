@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -19,21 +20,19 @@ namespace Application.Task
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            private readonly IHttpContextAccessor _httpContextAccessor;
+            private readonly IUnitOfWork _unitOfWork;
 
-            public Handler(DataContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+            public Handler(DataContext context, IMapper mapper, IUnitOfWork unitOfWork)
             {
+                _unitOfWork = unitOfWork;
                 _mapper = mapper;
                 _context = context;
-                _httpContextAccessor = httpContextAccessor;
             }
 
             public async Task<Result<List<TaskDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var user = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
                 var Tasks = await _context.ToDoLists
-                    .Where(x => x.AppUserId == user)
+                    .Where(x => x.AppUserId == _unitOfWork.UserAccessor.GetUsername())
                     .OrderByDescending(x => x.Importance)
                     .ThenBy(x => x.DueDate)
                     .ProjectTo<TaskDto>(_mapper.ConfigurationProvider)

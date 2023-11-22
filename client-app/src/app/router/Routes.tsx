@@ -3,21 +3,35 @@ import {createBrowserRouter, RouteObject} from "react-router-dom";
 import {NotFound} from "../../features/common/NotFound.tsx";
 import LoginForm from "../../features/users/LoginForm.tsx";
 import RegisterForm from "../../features/users/RegisterForm.tsx";
-import TaskDashboard from "../../features/tasks/dashboard/TaskDashboard.tsx";
+import TaskHome from "../../features/tasks/dashboard/TaskHome.tsx";
+import {store} from "../stores/store.ts";
+
 
 export const routes: RouteObject[] = [
     {
-        path: "/",
+        path: '/',
         element: <App />,
         children: [
-            {path: 'login', element: <LoginForm/>},
-            {path: 'register', element: <RegisterForm/>},
-            {path: 'task', element: <TaskDashboard/>},
-            {path: 'not-found', element: <NotFound/>},
-            {path: 'server-error', element: <div>Server Error</div>},
-            {path: '*', element: <NotFound/>},
-        ]
-    }
-]
+            {
+                path: 'login',
+                element: <LoginForm />,
+                canActivate: () => !store.userStore.isLoggedIn && '/login',
+            },
+            {
+                path: 'register',
+                element: <RegisterForm />,
+                canActivate: () => !store.userStore.isLoggedIn && '/login',
+            },
+            {
+                path: 'task',
+                element: <TaskHome />,
+                canActivate: () => store.userStore.isLoggedIn || '/login',
+            },
+            { path: 'not-found', element: <NotFound /> },
+            { path: 'server-error', element: <div>Server Error</div> },
+            { path: '*', element: <NotFound /> },
+        ],
+    },
+];
 
 export const router = createBrowserRouter(routes);

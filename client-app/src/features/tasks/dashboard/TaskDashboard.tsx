@@ -1,118 +1,85 @@
-import { observer } from 'mobx-react';
-import { Grid, Header, Icon, Segment, Button } from 'semantic-ui-react';
-import FloatingNavbar from '../../../app/layout/FloatingNavbar.tsx';
-import {useStore} from "../../../app/stores/store.ts";
+import {observer} from 'mobx-react';
+import {Grid} from 'semantic-ui-react';
+import {store, useStore} from "../../../app/stores/store.ts";
 import {useEffect} from "react";
-import TaskListItemPlaceholder from "./TaskListItemPlaceholder.tsx";
-import {DraggableTaskListContainer} from "./TaskList.tsx";
+import TaskColumns from "./TaskColumns.tsx";
+import {DragDropContext} from 'react-beautiful-dnd';
+
 
 export default observer(function TaskDashboard() {
-    const { darkModeStore: {isDarkMode}, taskStore: {loadTasks, loadingInitial, tasksByStatus} } = useStore();
+    const {taskStore: { loadTasks, tasksByStatus } } = useStore();
 
     useEffect(() => {
         loadTasks();
     }, [loadTasks]);
 
-    const taskSegmentGroupStyle = isDarkMode ?
-        { background: '#ffffff'} :
-        { background: 'linear-gradient(to bottom right, #000000, #404040)'};
+    const handleDragDrop = (results) => {
+        console.log(results); // Log the results to inspect in the console
+
+        const { source, destination, type } = results;
+
+        if (!destination) return;
+
+        if (source.droppableId === destination.droppableId && source.index === destination.index) return;
+
+        // Check if the key exists before accessing it
+        if (!tasksByStatus[source.droppableId] || !tasksByStatus[destination.droppableId]) return;
+
+        // Retrieve the dragged task
+        const draggedTask = tasksByStatus[source.droppableId][source.index];
+
+        // Handle logic based on the source and destination columns
+        console.log(`Moving task from ${source.droppableId} to ${destination.droppableId}`);
+
+        if (source.droppableId === 'todo' && destination.droppableId === 'doing') {
+            // Moving from Task to Doing
+            draggedTask.isDoing = true;
+        } else if (source.droppableId === 'doing' && destination.droppableId === 'todo') {
+            // Moving from Doing to Task
+            draggedTask.isDoing = false;
+        } else if (source.droppableId === 'doing' && destination.droppableId === 'done') {
+            // Moving from Doing to Done
+            draggedTask.isDoing = false;
+            draggedTask.isDone = true;
+        } else if (source.droppableId === 'done' && destination.droppableId === 'doing') {
+            // Moving from Done to Doing
+            draggedTask.isDoing = true;
+            draggedTask.isDone = false;
+        } else if (source.droppableId === 'done' && destination.droppableId === 'todo') {
+            // Moving from Done to Task
+            draggedTask.isDoing = false;
+            draggedTask.isDone = false;
+        } else {
+            console.log('Unsupported move');
+            return;
+        }
+
+        // Perform the update in your MobX store
+        store.taskStore.updateTask(draggedTask);
+
+        console.log('Task updated successfully');
+    }
 
     return (
-        <>
-            <FloatingNavbar />
-            <Segment basic textAlign='center' style={{ marginTop: '2em' }}>
-                <Header as='h2' inverted={isDarkMode}>
-                    Create a new task now by clicking the button below
-                </Header>
-                <Button primary size='huge' inverted={isDarkMode} color={isDarkMode ? 'teal' : 'teal'} circular>
-                    Create Task
-                </Button>
-            </Segment>
-
+        <DragDropContext onDragEnd={handleDragDrop}>
             <Grid container stackable centered>
                 <Grid.Row columns={3}>
                     {/* Task Column */}
                     <Grid.Column>
-                        <Segment.Group raised style={taskSegmentGroupStyle}>
-                            <Segment
-                                textAlign='center'
-                                attached='top'
-                                inverted={!isDarkMode}
-                                color={!isDarkMode ? 'teal' : 'teal'}
-                            >
-                                <Header as='h1'>
-                                    <Icon name='tasks' />
-                                    <Header.Content>Tasks</Header.Content>
-                                </Header>
-                            </Segment>
-                            <Segment raised attached='top'>
-                                {loadingInitial && tasksByStatus.todo.length === 0 ? (
-                                    <>
-                                        <TaskListItemPlaceholder/>
-                                        <TaskListItemPlaceholder/>
-                                    </>
-                                ) : (
-                                    <DraggableTaskListContainer tasks={tasksByStatus.todo}/>
-                                )}
-                            </Segment>
-                        </Segment.Group>
+                        <TaskColumns tasks={tasksByStatus.todo} columnColor='teal' columnName='Todo' />
                     </Grid.Column>
 
                     {/* Doing Column */}
                     <Grid.Column>
-                        <Segment.Group raised style={taskSegmentGroupStyle}>
-                            <Segment
-                                textAlign='center'
-                                attached='top'
-                                inverted={!isDarkMode}
-                                color={!isDarkMode ? 'red' : 'red'}
-                            >
-                                <Header as='h1'>
-                                    <Icon name='step forward' />
-                                    <Header.Content>Doing</Header.Content>
-                                </Header>
-                            </Segment>
-                            <Segment raised attached='top'>
-                                {loadingInitial && tasksByStatus.doing.length === 0 ? (
-                                    <>
-                                        <TaskListItemPlaceholder/>
-                                        <TaskListItemPlaceholder/>
-                                    </>
-                                ) : (
-                                    <DraggableTaskListContainer tasks={tasksByStatus.doing}/>
-                                )}
-                            </Segment>
-                        </Segment.Group>
+                        <TaskColumns tasks={tasksByStatus.doing} columnColor='red' columnName='Doing' />
                     </Grid.Column>
 
                     {/* Done Column */}
                     <Grid.Column>
-                        <Segment.Group raised style={taskSegmentGroupStyle}>
-                            <Segment
-                                textAlign='center'
-                                attached='top'
-                                inverted={!isDarkMode}
-                                color={!isDarkMode ? 'green' : 'green'}
-                            >
-                                <Header as='h1'>
-                                    <Icon name='check' />
-                                    <Header.Content>Done</Header.Content>
-                                </Header>
-                            </Segment>
-                            <Segment raised attached='top'>
-                                {loadingInitial && tasksByStatus.done.length === 0 ? (
-                                    <>
-                                        <TaskListItemPlaceholder/>
-                                        <TaskListItemPlaceholder/>
-                                    </>
-                                ) : (
-                                    <DraggableTaskListContainer tasks={tasksByStatus.done}/>
-                                )}
-                            </Segment>
-                        </Segment.Group>
+                        <TaskColumns tasks={tasksByStatus.done} columnColor='green' columnName='Done' />
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
-        </>
+        </DragDropContext>
     );
 });

@@ -2,7 +2,7 @@ import { Placeholder, Card } from "semantic-ui-react";
 
 export default function TaskListItemPlaceholder() {
     return (
-            <Card>
+            <Card fluid>
                 <Card.Content>
                     <Placeholder fluid>
                         <Placeholder.Header image>

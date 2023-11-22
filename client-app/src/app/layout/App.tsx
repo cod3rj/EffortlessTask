@@ -1,4 +1,4 @@
-import {Outlet, useLocation} from "react-router-dom";
+import {Navigate, Outlet, useLocation} from "react-router-dom";
 import {Container} from "semantic-ui-react";
 import {HomePage} from "../../features/home/HomePage.tsx";
 import {ToastContainer} from "react-toastify";
@@ -18,6 +18,9 @@ const App = () => {
         }
     }, [commonStore, userStore]);
 
+    if (!userStore.isLoggedIn && location.pathname !== '/login') {
+        return <Navigate to="/login" />;
+    }
 
     return (
         <>

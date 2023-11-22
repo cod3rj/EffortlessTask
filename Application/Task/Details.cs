@@ -1,9 +1,8 @@
-using System.Security.Claims;
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -20,19 +19,18 @@ namespace Application.Task
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            private readonly IHttpContextAccessor _httpContextAccessor;
-            public Handler(DataContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+            private readonly IUnitOfWork _unitOfWork;
+            public Handler(DataContext context, IMapper mapper, IUnitOfWork unitOfWork)
             {
-                _httpContextAccessor = httpContextAccessor;
+                _unitOfWork = unitOfWork;
                 _mapper = mapper;
                 _context = context;
             }
 
             public async Task<Result<TaskDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var user = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var task = await _context.ToDoLists
-                    .Where(x => x.AppUserId == user)
+                    .Where(x => x.AppUserId == _unitOfWork.UserAccessor.GetUsername())
                     .ProjectTo<TaskDto>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
