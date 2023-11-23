@@ -15,8 +15,13 @@ const TaskColumns = ({ tasks, columnColor, columnName } : Props) => {
     const { darkModeStore: { isDarkMode }, taskStore: { loadingInitial } } = useStore();
 
     const taskSegmentGroupStyle = isDarkMode
-        ? { background: '#ffffff', transition: 'background 0.5s ease' }
-        : { background: 'linear-gradient(to bottom right, #000000, #404040)', transition: 'background 0.5s ease' };
+        ? { background: '#ffffff', transition: 'background 0.5s ease', maxHeight: '600px', overflowY: 'auto',}
+        : {
+            background: 'linear-gradient(to bottom right, #000000, #404040)',
+            transition: 'background 0.5s ease',
+            maxHeight: '600px',
+            overflowY: 'auto',
+        };
 
     return (
         <Droppable droppableId={columnName.toLowerCase()} key={columnName.toLowerCase()}>

@@ -1,6 +1,8 @@
 using Application.Core;
+using Application.Task.Validations;
 using AutoMapper;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -11,6 +13,14 @@ namespace Application.Task
         public class Command : IRequest<Result<Unit>>
         {
             public ToDoList Task { get; set; }
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(a => a.Task).SetValidator(new TaskValidator());
+            }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>

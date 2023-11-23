@@ -1,4 +1,4 @@
-using Application.Task;
+using Application.Task.DTO;
 using AutoMapper;
 using Domain;
 

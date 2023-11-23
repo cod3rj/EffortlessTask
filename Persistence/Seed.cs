@@ -41,6 +41,7 @@ namespace Persistence
                 {
                     new ToDoList
                     {
+                        Id = 1,
                         Title = "Complete React Tutorial",
                         Category = "Learning",
                         DueDate = DateTime.Now.AddDays(7),
@@ -51,6 +52,7 @@ namespace Persistence
                     },
                     new ToDoList
                     {
+                        Id = 2,
                         Title = "Implement User Authentication",
                         Category = "Development",
                         DueDate = DateTime.Now.AddDays(14),
@@ -61,6 +63,7 @@ namespace Persistence
                     },
                     new ToDoList
                     {
+                        Id = 3,
                         Title = "Write API Documentation",
                         Category = "Documentation",
                         DueDate = DateTime.Now.AddDays(10),
@@ -71,6 +74,7 @@ namespace Persistence
                     },
                     new ToDoList
                     {
+                        Id = 4,
                         Title = "Refactor Task Service",
                         Category = "Development",
                         DueDate = DateTime.Now.AddDays(21),
@@ -81,6 +85,7 @@ namespace Persistence
                     },
                     new ToDoList
                     {
+                        Id = 5,
                         Title = "Prepare Presentation",
                         Category = "Planning",
                         DueDate = DateTime.Now.AddDays(5),

@@ -26,5 +26,17 @@ namespace API.Controllers
             task.Id = id;
             return HandleResult(await Mediator.Send(new Edit.Command { Task = task }));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTask(ToDoList task)
+        {
+            return HandleResult(await Mediator.Send(new Create.Command { Task = task }));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(int id)
+        {
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
+        }
     }
 }

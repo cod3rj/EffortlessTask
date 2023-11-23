@@ -1,10 +1,11 @@
-import {Navigate, Outlet, useLocation} from "react-router-dom";
+import {Outlet, useLocation} from "react-router-dom";
 import {Container} from "semantic-ui-react";
 import {HomePage} from "../../features/home/HomePage.tsx";
 import {ToastContainer} from "react-toastify";
 import {useStore} from "../stores/store.ts";
 import {useEffect} from "react";
 import {observer} from "mobx-react";
+import ModalContainer from "../common/modals/ModalContainer.tsx";
 
 const App = () => {
     const location = useLocation();
@@ -18,12 +19,9 @@ const App = () => {
         }
     }, [commonStore, userStore]);
 
-    if (!userStore.isLoggedIn && location.pathname !== '/login') {
-        return <Navigate to="/login" />;
-    }
-
     return (
         <>
+            <ModalContainer/>
             <ToastContainer position='bottom-right' theme='colored'/>
             {location.pathname === '/' ? <HomePage/> : (
                 <>

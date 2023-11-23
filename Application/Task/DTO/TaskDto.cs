@@ -1,7 +1,6 @@
-using Domain;
 using Domain.Enum;
 
-namespace Application.Task
+namespace Application.Task.DTO
 {
     public class TaskDto
     {

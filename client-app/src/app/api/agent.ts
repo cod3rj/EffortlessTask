@@ -96,7 +96,10 @@ axios.interceptors.response.use(async response => {
 })
 const Task = {
     list: () => request.get<Task[]>('/Task'),
+    details: (id: string) => request.get<Task>(`/Task/${id}`),
     update: (task: TaskFormValues) => request.put(`/Task/${task.id}`, task),
+    create: (task: TaskFormValues) => request.post('/Task', task),
+    delete: (id: string) => request.delete<void>(`/Task/${id}`),
 }
 
 const Account = {

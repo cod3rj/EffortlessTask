@@ -5,7 +5,7 @@ export interface Task {
     dueDate: Date | null;
     isDoing: boolean;
     isDone: boolean;
-    importance: ImportanceLevel | null;
+    importance: number | null; // Change ImportanceLevel to number
     appUserId: string;
 }
 
@@ -16,7 +16,7 @@ export class TaskModel implements Task {
     dueDate: Date | null = null;
     isDoing: boolean = false;
     isDone: boolean = false;
-    importance: ImportanceLevel | null = null;
+    importance: number | null = null; // Change ImportanceLevel to number
     appUserId: string = '';
 
     constructor(init?: Task) {
@@ -31,7 +31,7 @@ export class TaskFormValues {
     dueDate: Date | null = null;
     isDoing: boolean = false;
     isDone: boolean = false;
-    importance: ImportanceLevel | null = null;
+    importance: number | null = null; // Change ImportanceLevel to number
     appUserId: string = '';
 
     constructor(task?: TaskFormValues) {
@@ -48,8 +48,3 @@ export class TaskFormValues {
     }
 }
 
-export enum ImportanceLevel {
-    Low = 1,
-    Medium = 2,
-    High = 3,
-}

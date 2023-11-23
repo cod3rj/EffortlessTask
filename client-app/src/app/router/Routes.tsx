@@ -4,8 +4,7 @@ import {NotFound} from "../../features/common/NotFound.tsx";
 import LoginForm from "../../features/users/LoginForm.tsx";
 import RegisterForm from "../../features/users/RegisterForm.tsx";
 import TaskHome from "../../features/tasks/dashboard/TaskHome.tsx";
-import {store} from "../stores/store.ts";
-
+import AuthenticatedRoute from "./AuthenticationRoute.tsx";
 
 export const routes: RouteObject[] = [
     {
@@ -15,17 +14,16 @@ export const routes: RouteObject[] = [
             {
                 path: 'login',
                 element: <LoginForm />,
-                canActivate: () => !store.userStore.isLoggedIn && '/login',
             },
             {
                 path: 'register',
                 element: <RegisterForm />,
-                canActivate: () => !store.userStore.isLoggedIn && '/login',
             },
             {
                 path: 'task',
-                element: <TaskHome />,
-                canActivate: () => store.userStore.isLoggedIn || '/login',
+                element: (
+                    <AuthenticatedRoute element={<TaskHome />} />
+                ),
             },
             { path: 'not-found', element: <NotFound /> },
             { path: 'server-error', element: <div>Server Error</div> },

@@ -1,5 +1,6 @@
 using Application.Core;
 using Application.Interfaces;
+using Application.Task.DTO;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
