@@ -13,13 +13,13 @@ export default class TaskStore {
         makeAutoObservable(this)
     }
 
-    get tasksByStatus() {
+    get tasksByStatus(): { [key: string]: Task[] } {
         const tasks = Array.from(this.taskRegistry.values());
         return {
             todo: tasks.filter(task => !task.isDoing && !task.isDone),
             doing: tasks.filter(task => task.isDoing && !task.isDone),
             done: tasks.filter(task => task.isDone),
-        };
+        }
     }
 
     loadTasks = async () => {
@@ -86,6 +86,22 @@ export default class TaskStore {
             store.modalStore.closeModal(); // This will close the modal after the user has logged in
         } catch (error) {
             console.error(error);
+        }
+    }
+
+    deleteTask = async (id: string) => {
+        this.loading = true;
+        try {
+            await agent.Task.delete(id);
+            runInAction(() => {
+                this.taskRegistry.delete(id);
+                this.loading = false;
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.loading = false;
+            })
         }
     }
 

@@ -15,7 +15,7 @@ export default observer(function TaskHome() {
     return (
         <>
             <FloatingNavbar />
-            <Segment basic textAlign='center' style={{ marginTop: '10em' }}>
+            <Segment basic textAlign='center' style={{ marginTop: '1em' }}>
                 <Header as='h2' inverted={isDarkMode}>
                     Create a new task now by clicking the button below
                 </Header>
